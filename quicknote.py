@@ -96,6 +96,33 @@ def cmd_delete(args):
     save_todos(todos)
     print(f'Deleted "{args.name}"')
 
+def cmd_edit(args):
+    todos = load_todos()
+
+    todo = find_todo(todos, args.name)
+
+    if not todo:
+        print(f'No todo named "{args.name}" found.')
+        return
+
+    field = args.field.lower()
+    if field not in VALID_EDIT_FIELDS:
+        print(f'Cannot edit field "{args.field}". Valid fiels: {",".join(VALID_EDIT_FIELDS)}')
+        return
+
+    if field == "priority":
+        try:
+            todo["priority"] = int(args.new_value)
+
+        except ValueError:
+            print("Priority must be an integer.")
+            return
+    else:
+        todo[field] = args.new_value
+
+    save_todos(todos)
+    print(f'Updated "{args.name}": {field} -> {args.new_value}')
+
 # --------------------------------------------------------------------------
 # Parser setup
 # --------------------------------------------------------------------------
@@ -106,8 +133,10 @@ def build_parser():
         description="A simple JSON-backed command-line todo list manager.",
         epilog=(
             "examples:\n"
-            "  quicknote.py create \"get dinner\" 2026-10-01 3\n"
-            "  quicknote.py list\n"
+            "   quicknote.py create \"get dinner\" 2026-10-01 3\n"
+            "   quicknote.py list\n"
+            "   quicknote.py delete \"get dinner\"\n"
+            "   quicknote.py edit \"get dinner\" date 2026-10-05\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -142,6 +171,17 @@ def build_parser():
     p_delete.add_argument("name", help="name of the todo to be removed")
     p_delete.set_defaults(func=cmd_delete)
 
+
+
+    p_edit = subparsers.add_parser(
+        "edit", help="edit <name> <field> <new_value>",
+        description="Edit a todo's name, date and priority"
+    )
+
+    p_edit.add_argument("name", help="name of the todo to edit")
+    p_edit.add_argument("field", help="Fields to edit: name, date, priority")
+    p_edit.add_argument("new_value", help="new value for the field")
+    p_edit.set_defaults(func=cmd_edit)
     return parser
 
 
