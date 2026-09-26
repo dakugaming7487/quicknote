@@ -81,7 +81,20 @@ def cmd_list(args):
 
     for t in todos_sorted:
         print(f'{t["name"]:<{name_w}}{(t.get("date") or "-"):<14}{t.get("priority", 0):<10}')
-    
+
+def cmd_delete(args):
+
+    todos = load_todos()
+
+    todo = find_todo(todos, args.name)
+
+    if not todo:
+        print(f'Todo named "{args.name}" not found.')
+        return
+
+    todos.remove(todo)
+    save_todos(todos)
+    print(f'Deleted "{args.name}"')
 
 # --------------------------------------------------------------------------
 # Parser setup
@@ -120,6 +133,14 @@ def build_parser():
     )
 
     p_list.set_defaults(func=cmd_list)
+
+    p_delete = subparsers.add_parser(
+        "delete", help="delete <name>",
+        description="Delete a todo by name. name is required"
+    )
+
+    p_delete.add_argument("name", help="name of the todo to be removed")
+    p_delete.set_defaults(func=cmd_delete)
 
     return parser
 
