@@ -2,7 +2,7 @@
 
 A lightweight command-line Todo manager written in Python.
 
-QuickNote stores Todos as JSON and provides commands for creating, viewing, editing, deleting, and prioritizing taks directly from the terminal.
+QuickNote stores Todos as JSON and provides commands for creating, viewing, editing, deleting, and prioritizing tasks directly from the terminal.
 
 ## Features
 
@@ -30,7 +30,7 @@ git clone https://github.com/dakugaming7487/quicknote
 cd <repo-directory>
 ```
 
-Create and activate a virtual enviromant:
+Create and activate a virtual environment:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -151,7 +151,7 @@ Example:
     │       ├── __init__.py
     │       └── quicknote.py
     ├── tests/
-    └── todo.json
+    └── todos.json
 
 ## Development
 

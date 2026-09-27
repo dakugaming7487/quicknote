@@ -11,4 +11,4 @@ dist/
 .coverage
 htmlcov/
 
-todo.json
+todos.json

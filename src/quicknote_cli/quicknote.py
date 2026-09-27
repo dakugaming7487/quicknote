@@ -5,7 +5,7 @@ import sys
 import os
 
 DATA_DIR = os.path.expanduser("~/.local/share/quicknote")
-DATA_FILE = os.path.join(DATA_DIR, "todo.json")
+DATA_FILE = os.path.join(DATA_DIR, "todos.json")
 VALID_EDIT_FIELDS = ("name", "date", "priority")
 
 # --------------------------------------------------------------------------
