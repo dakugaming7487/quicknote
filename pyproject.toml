@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quicknote-cli"
+version = "0.1.0"
+description = "A simple command-line todo manager"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+    { name = "dakugaming7487" }
+]
+dependencies = []
+
+[project.scripts]
+quicknote = "quicknote_cli.quicknote:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

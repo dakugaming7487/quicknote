@@ -4,7 +4,8 @@ import json
 import sys
 import os
 
-DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "todo.json")
+DATA_DIR = os.path.expanduser("~/.local/share/quicknote")
+DATA_FILE = os.path.join(DATA_DIR, "todo.json")
 VALID_EDIT_FIELDS = ("name", "date", "priority")
 
 # --------------------------------------------------------------------------
@@ -21,6 +22,7 @@ def load_todos():
         return []
 
 def save_todos(todos):
+    os.makedirs(DATA_DIR, exist_ok=True)
     with open(DATA_FILE, "w") as f:
         json.dump(todos, f, indent=2)
 
