@@ -1,173 +1,315 @@
 # QuickNote
 
-A lightweight command-line Todo manager written in Python.
+QuickNote is a lightweight command-line todo manager written in Python.
 
-QuickNote stores Todos as JSON and provides commands for creating, viewing, editing, deleting, and prioritizing tasks directly from the terminal.
+It stores todos locally in a JSON file and provides simple commands for creating, viewing, editing, deleting, prioritizing, and completing todos.
 
 ## Features
 
-- Create Todo with an optional date and priority
-- List Todos sorted by priority
-- Delete Todos by name
-- Edit a Todo's name, date, or priority
-- Increase or decrease a Todo's priority
-- Find the highest-priority Todo 
-- Find the Todo with the nearest date to today
-- JSON-based local storage
-- Helpful command-line error messages and help output
-- No external runtime dependencies
-
-## Requirements
-
-- Python 3.9 or newer
+- Create todos
+- List todos
+- Delete todos
+- Edit todo names, dates, and priorities
+- Increase or decrease priority
+- Find the highest-priority todos
+- Find todos with dates closest to today
+- Mark todos as completed or pending
+- Persistent local JSON storage
+- Cross-platform data storage
+- Date validation
+- Helpful CLI error messages
+- Automated tests with pytest
+- Backwards compatibility with older todo files
 
 ## Installation
 
-Clone the repository:
+Clone the repository and enter the project directory:
 
 ```bash
-git clone https://github.com/dakugaming7487/quicknote
-cd <repo-directory>
+git clone https://github.com/dakugaming7487/quicknote.git
+cd quicknote
 ```
 
-Create and activate a virtual environment:
+Create a virtual environment:
+
+### Linux / macOS
+
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Install QuickNote:
+### Windows
 
-```bash
-pip install .
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
-for development, Install it in editable mode:
+Install QuickNote in editable mode:
+
 ```bash
-pip install -e .
+python -m pip install -e .
 ```
 
-### Usage
+## Usage
 
-After installation, run
+QuickNote uses the `quicknote` command.
+
+### Create a todo
+
 ```bash
-quicknote
+quicknote create "Finish homework"
 ```
 
-You can view available commands with:
+A date and priority can also be provided:
+
 ```bash
-quicknote --help
+quicknote create "Finish homework" 2026-10-05 3
 ```
 
-### Create a Todo 
-Create a Todo with only name:
-```bash
-quicknote create "Get dinner"
-```
-you can optionally provide a date and priority:
-```bash
-quicknote create "Get dinner" 2026-20-1 3
+Supported date formats are:
+
+```text
+YYYY-MM-DD
+YYYY/MM/DD
+MM/DD/YYYY
+DD-MM-YYYY
 ```
 
-### List Todos
+### List todos
+
 ```bash
 quicknote list
 ```
 
-Todos are displayed sorted by priority
+Todos are displayed with:
 
-### Delete a Todo
+- Name
+- Date
+- Priority
+- Status
+
+Todos are sorted by priority.
+
+### Delete a todo
+
 ```bash
-quicknote delete "Get dinner"
+quicknote delete "Finish homework"
 ```
 
-### Edit a Todo
-You can edit the name, date, or priority of an existing todo.
+### Edit a todo
 
-for example:
+Edit the name:
+
 ```bash
-quicknote edit "Get dinner" date 2026-10-5
+quicknote edit "Finish homework" name "Finish math homework"
 ```
 
-Or:
+Edit the date:
+
 ```bash
-quicknote edit "Get dinner" priority 5
+quicknote edit "Finish homework" date 2026-10-06
 ```
 
-### Change Priority
-Increase a todo's priority:
+Edit the priority:
+
 ```bash
-quicknote priority "Get dinner" increase 2
+quicknote edit "Finish homework" priority 5
 ```
 
-Decrease a todo's Priority:
+### Change priority
+
+Increase priority:
+
 ```bash
-quicknote priority "Get dinner" decrease 1
+quicknote priority "Finish homework" increase 2
 ```
 
-### Find Important Todos
-Decrease a todo's priority:
+Decrease priority:
 
-    quicknote priority "Get dinner" decrease 1
+```bash
+quicknote priority "Finish homework" decrease 1
+```
 
-### Find Important Todos
+### Complete a todo
 
-Show the highest-priority todo:
+```bash
+quicknote complete "Finish homework"
+```
 
-    quicknote important
+This marks the todo as completed.
 
-Show the todo or todos whose date is nearest to today:
+To mark it as pending again:
 
-    quicknote important --date
+```bash
+quicknote complete "Finish homework" --pending
+```
+
+### Find important todos
+
+Show the highest-priority todo or todos:
+
+```bash
+quicknote important
+```
+
+Show the todo or todos whose dates are closest to today:
+
+```bash
+quicknote important --date
+```
+
+### Get help
+
+Show the main help page:
+
+```bash
+quicknote --help
+```
+
+Show help for a specific command:
+
+```bash
+quicknote create --help
+```
 
 ## Data Storage
 
-QuickNote uses JSON for local todo storage.
+QuickNote stores your todo data locally on your computer.
 
-Each todo contains:
+### Windows
 
-- `name` - the name of the task
-- `date` - the optional due date
-- `priority` - an integer representing its priority
+```text
+%LOCALAPPDATA%\QuickNote\todos.json
+```
 
-Example:
+For example:
 
-    [
-      {
-        "name": "Get dinner",
-        "date": "2026-10-01",
-        "priority": 3
-      }
-    ]
+```text
+C:\Users\YourName\AppData\Local\QuickNote\todos.json
+```
+
+### macOS
+
+```text
+~/Library/Application Support/QuickNote/todos.json
+```
+
+### Linux
+
+If `XDG_DATA_HOME` is set:
+
+```text
+$XDG_DATA_HOME/quicknote/todos.json
+```
+
+Otherwise:
+
+```text
+~/.local/share/quicknote/todos.json
+```
+
+QuickNote does not require a database or cloud service.
+
+## Privacy
+
+Your todos are stored locally on your own computer.
+
+The `todos.json` file is intentionally excluded from Git because it may contain private or personal information.
+
+Do not commit your personal `todos.json` file to the repository.
+
+A new installation automatically creates the required data directory when QuickNote saves its first todo.
+
+## Existing Todo Data
+
+QuickNote is designed to remain compatible with older todo files.
+
+Older todos may not contain a `completed` field. When they are loaded, QuickNote treats them as pending automatically.
+
+You do not need to recreate your existing todos after updating QuickNote.
+
+## Testing
+
+QuickNote uses `pytest` for automated tests.
+
+Install the development test dependency if necessary:
+
+```bash
+python -m pip install pytest
+```
+
+Run the complete test suite:
+
+```bash
+pytest
+```
+
+The tests cover functionality including:
+
+- Creating todos
+- Listing todos
+- Deleting todos
+- Editing todos
+- Priority changes
+- Invalid priority values
+- Date parsing
+- Invalid dates
+- Empty todo lists
+- Priority sorting
+- Date-based selection
+- Completion status
+- Local data storage
+- Backwards compatibility
 
 ## Project Structure
 
-    .
-    ├── LICENSE
-    ├── README.md
-    ├── pyproject.toml
-    ├── src/
-    │   └── quicknote_cli/
-    │       ├── __init__.py
-    │       └── quicknote.py
-    └── tests/
+```text
+quicknote/
+├── src/
+│   └── quicknote_cli/
+│       ├── __init__.py
+│       └── quicknote.py
+├── tests/
+│   └── test_quicknote.py
+├── .gitignore
+├── LICENSE
+├── pyproject.toml
+└── README.md
+```
+
 ## Development
 
 Install the project in editable mode:
 
-    pip install -e .
+```bash
+python -m pip install -e .
+```
 
-Build the package:
+Run the tests:
 
-    python -m build
+```bash
+pytest
+```
 
-The build system creates distribution files inside the `dist/` directory.
+Run QuickNote directly:
 
-Run tests with:
+```bash
+quicknote --help
+```
 
-    pytest
+Before committing changes, it is recommended to run:
+
+```bash
+pytest
+git status
+```
+
+Make sure personal todo data is not staged or committed.
 
 ## License
 
-See the `LICENSE` file for the license used by this project.
+QuickNote is released under the MIT License.
 
+See [LICENSE](LICENSE) for the full license text.
