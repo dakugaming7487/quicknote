@@ -150,9 +150,7 @@ Example:
     │   └── quicknote_cli/
     │       ├── __init__.py
     │       └── quicknote.py
-    ├── tests/
-    └── todos.json
-
+    └── tests/
 ## Development
 
 Install the project in editable mode:
