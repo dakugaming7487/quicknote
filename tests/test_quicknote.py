@@ -355,6 +355,77 @@ def test_edit_invalid_priority(
     assert "Priority must be an integer" in output
     assert quicknote.load_todos()[0]["priority"] == 3
 
+def test_edit_name_rejects_duplicate(isolated_storage, capsys):
+    quicknote.save_todos(
+        [
+            {
+                "name": "Homework",
+                "date": "",
+                "priority": 1,
+                "completed": False,
+            },
+            {
+                "name": "Shopping",
+                "date": "",
+                "priority": 2,
+                "completed": False,
+            },
+        ]
+    )
+
+    args = type(
+        "Args",
+        (),
+        {
+            "name": "Homework",
+            "field": "name",
+            "new_value": "Shopping",
+        },
+    )()
+
+    quicknote.cmd_edit(args)
+
+    captured = capsys.readouterr()
+
+    assert 'A todo named "Shopping" already exists.' in captured.out
+
+    todos = quicknote.load_todos()
+
+    assert todos[0]["name"] == "Homework"
+    assert todos[1]["name"] == "Shopping"
+
+
+def test_edit_name_rejects_empty_name(isolated_storage, capsys):
+    quicknote.save_todos(
+        [
+            {
+                "name": "Homework",
+                "date": "",
+                "priority": 1,
+                "completed": False,
+            },
+        ]
+    )
+
+    args = type(
+        "Args",
+        (),
+        {
+            "name": "Homework",
+            "field": "name",
+            "new_value": "   ",
+        },
+    )()
+
+    quicknote.cmd_edit(args)
+
+    captured = capsys.readouterr()
+
+    assert "Todo name cannot be empty." in captured.out
+
+    todos = quicknote.load_todos()
+
+    assert todos[0]["name"] == "Homework"
 
 # --------------------------------------------------------------------------
 # Priority tests

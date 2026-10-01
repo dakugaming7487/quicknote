@@ -331,7 +331,19 @@ def cmd_edit(args):
         todo["date"] = args.new_value
 
     else:
-        todo[field] = args.new_value
+        new_name = args.new_value.strip()
+
+        if not new_name:
+            print("Todo name cannot be empty.")
+            return
+
+        existing_todo = find_todo(todos, new_name)
+
+        if existing_todo is not None and existing_todo is not todo:
+            print(f'A todo named "{new_name}" already exists.')
+            return
+
+        todo[field] = new_name
 
     save_todos(todos)
 
