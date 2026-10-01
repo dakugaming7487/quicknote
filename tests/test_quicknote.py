@@ -78,6 +78,37 @@ def test_legacy_todo_gets_completion_field(isolated_storage):
 
     assert todos[0]["completed"] is False
 
+def test_invalid_todo_entries_are_ignored(isolated_storage):
+    isolated_storage.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    with open(
+        isolated_storage,
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(
+            [
+                "invalid",
+                123,
+                {
+                    "name": "Valid todo",
+                    "priority": 2,
+                },
+            ],
+            file,
+        )
+
+    todos = quicknote.load_todos()
+
+    assert len(todos) == 1
+    assert todos[0]["name"] == "Valid todo"
+    assert todos[0]["date"] == ""
+    assert todos[0]["priority"] == 2
+    assert todos[0]["completed"] is False
+
 
 # --------------------------------------------------------------------------
 # Create tests

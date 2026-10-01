@@ -71,11 +71,20 @@ def load_todos():
 
     # Backwards compatibility:
     # old todos do not have a "completed" field.
-    for todo in todos:
-        if isinstance(todo, dict):
-            todo.setdefault("completed", False)
+    valid_todos = []
 
-    return todos
+    for todo in todos:
+        if not isinstance(todo, dict):
+            continue
+
+        todo.setdefault("name", "")
+        todo.setdefault("date", "")
+        todo.setdefault("priority", 0)
+        todo.setdefault("completed", False)
+
+        valid_todos.append(todo)
+
+    return valid_todos
 
 
 def save_todos(todos):
