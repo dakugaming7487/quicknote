@@ -4,6 +4,9 @@ QuickNote is a lightweight command-line todo manager written in Python.
 
 It stores todos locally in a JSON file and provides simple commands for creating, viewing, editing, deleting, prioritizing, and completing todos.
 
+## ScreenShot 
+![QuickNote Demo](screenshots/quicknote-demo.png)
+
 ## Features
 
 - Create todos

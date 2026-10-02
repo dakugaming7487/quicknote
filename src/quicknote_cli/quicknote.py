@@ -505,18 +505,18 @@ def build_parser():
     )
 
     p_create.add_argument(
+            "priority",
+            nargs="?",
+            type=int,
+            default=None,
+            help="priority as an integer",
+        )
+
+    p_create.add_argument(
         "date",
         nargs="?",
         default=None,
         help="due date, e.g. 2026-10-01",
-    )
-
-    p_create.add_argument(
-        "priority",
-        nargs="?",
-        type=int,
-        default=None,
-        help="priority as an integer",
     )
 
     p_create.set_defaults(func=cmd_create)
